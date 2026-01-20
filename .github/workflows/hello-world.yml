@@ -1,6 +1,20 @@
 name: Hello World Pipeline
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
 
 jobs:
   build:
@@ -8,5 +22,50 @@ jobs:
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v4
+      
       - name: Run a one-line script
         run: echo "Hello, World!"
+      
+      - name: Build application
+        run: |
+          echo "Building application..."
+          # Add your build commands here
+          echo "Build completed successfully!"
+
+  deploy-dev:
+    needs: build
+    if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'dev')
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Deploy to Dev
+        run: |
+          echo "Deploying to DEV environment..."
+          # Add your deployment commands here
+          echo "Deployment to DEV completed!"
+
+  deploy-staging:
+    needs: build
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Deploy to Staging
+        run: |
+          echo "Deploying to STAGING environment..."
+          # Add your deployment commands here
+          echo "Deployment to STAGING completed!"
+
+  deploy-prod:
+    needs: build
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'prod'
+    runs-on: ubuntu-latest
+    environment: 
+      name: prod
+      url: https://your-app.com
+    steps:
+      - name: Deploy to Production
+        run: |
+          echo "Deploying to PRODUCTION environment..."
+          # Add your deployment commands here
+          echo "Deployment to PRODUCTION completed!"

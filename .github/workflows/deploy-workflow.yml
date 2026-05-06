@@ -1,0 +1,54 @@
+name: Build and Deploy Workflow
+
+on:
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  build_package:
+    name: Build Application Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Application Files
+        run: |
+          mkdir build
+          echo "<h1>SimpleWebApp</h1><p>Version: 1.0.${{ github.run_number }}</p>" > build/index.html
+          echo '{"appName":"SimpleWebApp", "version":"1.0.${{ github.run_number }}"}' > build/config.json
+          
+      - name: Publish Application Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: webapp
+          path: build/
+
+  deploy_dev:
+    name: Deploy to Development
+    needs: build_package
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webapp
+          path: deploy/dev
+          
+      - name: Deploy and Smoke Test
+        run: |
+          echo "Deploying to Dev..."
+          ls -R deploy/dev
+          echo "Running Smoke Tests..."
+          test -f deploy/dev/index.html && echo "Verified!"
+
+  deploy_qa:
+    name: Deploy to QA
+    needs: deploy_dev
+    runs-on: ubuntu-latest
+    environment: qa
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webapp
+          path: deploy/qa
+      - name: Integration Tests
+        run: echo "Running QA Integration Tests..."

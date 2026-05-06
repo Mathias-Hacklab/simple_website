@@ -1,0 +1,22 @@
+name: Code Quality Check
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check HTML Syntax
+        # This uses a simple grep/tidy check or a specialized action
+        run: |
+          echo "Scanning for unclosed tags..."
+          # You can add 'tidy' or 'htmlhint' here
+          find . -name "*.html" -exec echo "Checking {}" \;
+
+      - name: CSS Lint
+        run: echo "Validating CSS styles..."

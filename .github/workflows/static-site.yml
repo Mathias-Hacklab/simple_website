@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Production
-      url: https://your-github-username.github.io/your-repo-name/ # <-- Put your real GitHub Pages URL here!
+      url: https://Mathias-Hacklab.github.io/simple_website/ # <-- Put your real GitHub Pages URL here!
     steps:
       - name: Sync Files to Production Storage
         run: |

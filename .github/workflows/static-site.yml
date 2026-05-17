@@ -30,6 +30,9 @@ jobs:
     name: Global CDN Deployment
     needs: build-frontend
     runs-on: ubuntu-latest
+    environment:
+      name: Production
+      url: https://your-github-username.github.io/your-repo-name/ # <-- Put your real GitHub Pages URL here!
     steps:
       - name: Sync Files to Production Storage
         run: |

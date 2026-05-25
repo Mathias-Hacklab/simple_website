@@ -1,4 +1,4 @@
-name: Test-Pipeli
+name: Test-Pipelim
 
 on:
   pull_request:

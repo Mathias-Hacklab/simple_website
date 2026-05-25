@@ -1,0 +1,29 @@
+name: Test
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Quality Gate
+        id: quality_gate
+        run: |
+          echo "GATE_STATUS=failed" >> $GITHUB_OUTPUT
+          echo "Quality gate evaluation finished."
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: validate
+    if: ${{ steps.quality_gate.outputs.GATE_STATUS == 'success' }}
+    
+    steps:
+      - name: Production Deployment Step
+        run: |
+          echo "Starting deployment..."
+          bash ./scripts/critical_deploy_script.sh
+          echo "Deployment sequence reached the end!"

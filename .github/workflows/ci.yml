@@ -13,14 +13,15 @@ jobs:
       - name: Run Quality Gate
         id: quality_gate
         run: |
-          # Replace this with actual validation logic
-          echo "GATE_STATUS=success" >> $GITHUB_OUTPUT
-          echo "Quality gate evaluation finished."
+          # Replace with actual validation logic
+          echo "GATE_STATUS=success" >> $GITHUB_ENV
+        outputs:
+          GATE_STATUS: ${{ env.GATE_STATUS }}
 
   deploy:
     runs-on: ubuntu-latest
     needs: validate
-    if: ${{ steps.quality_gate.outputs.GATE_STATUS == 'success' }}
+    if: ${{ needs.validate.outputs.GATE_STATUS == 'success' }}
     
     steps:
       - name: Production Deployment Step

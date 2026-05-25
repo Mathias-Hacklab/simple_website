@@ -13,7 +13,7 @@ jobs:
       - name: Run Quality Gate
         id: quality_gate
         run: |
-          # Replace this with actual quality gate evaluation logic
+          # Replace this with actual validation logic
           echo "GATE_STATUS=success" >> $GITHUB_OUTPUT
           echo "Quality gate evaluation finished."
 

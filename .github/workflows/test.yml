@@ -1,4 +1,4 @@
-name: Advanced Lifecycle Test
+name: Advanced-Lifecycle-Test
 
 on:
   push:

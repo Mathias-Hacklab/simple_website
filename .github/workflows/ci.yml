@@ -7,19 +7,21 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    outputs:
+      gate_status: ${{ steps.quality_gate.outputs.GATE_STATUS }}
     steps:
       - uses: actions/checkout@v3
 
       - name: Run Quality Gate
         id: quality_gate
         run: |
-          echo "GATE_STATUS=success" >> $GITHUB_ENV
+          echo "GATE_STATUS=success" >> $GITHUB_OUTPUT
           echo "Quality gate evaluation finished."
 
   deploy:
     runs-on: ubuntu-latest
     needs: validate
-    if: ${{ env.GATE_STATUS == 'success' }}
+    if: ${{ needs.validate.outputs.gate_status == 'success' }}
     
     steps:
       - name: Production Deployment Step

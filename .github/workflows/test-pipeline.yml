@@ -15,6 +15,12 @@ jobs:
           mkdir -p dist
           echo '{"version": "1.0.0", "env": "production"}' > dist/metadata.json
 
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: dist
+
       - name: Set Release Flag
         id: set_flag
         run: |
@@ -25,6 +31,12 @@ jobs:
     needs: compile-assets
     steps:
       - uses: actions/checkout@v4
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: dist
 
       - name: Read Metadata File
         run: |

@@ -15,10 +15,10 @@ jobs:
           mkdir -p dist
           echo '{"version": "1.0.0", "env": "production"}' > dist/metadata.json
 
-      - name: Upload Artifacts
+      - name: Upload Metadata Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dist-files
+          name: metadata-artifact
           path: dist
 
       - name: Set Release Flag
@@ -32,10 +32,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download Artifacts
+      - name: Download Metadata Artifact
         uses: actions/download-artifact@v4
         with:
-          name: dist-files
+          name: metadata-artifact
           path: dist
 
       - name: Read Metadata File

@@ -7,6 +7,8 @@ on:
 jobs:
   compile-assets:
     runs-on: ubuntu-latest
+    outputs:
+      release_ready: ${{ steps.set_flag.outputs.release_ready }}
     steps:
       - uses: actions/checkout@v4
 
@@ -25,6 +27,9 @@ jobs:
         id: set_flag
         run: |
           echo "RELEASE_READY=true" >> $GITHUB_ENV
+          echo "true" > release_ready
+        outputs:
+          release_ready: ${{ steps.set_flag.outputs.release_ready }}
 
   publish-release:
     runs-on: ubuntu-latest
@@ -44,7 +49,7 @@ jobs:
 
       - name: Evaluate Pipeline State
         run: |
-          if [ "$RELEASE_READY" = "true" ]; then
+          if [ "${{ needs.compile-assets.outputs.release_ready }}" = "true" ]; then
             echo "State validated. Creating GitHub Release..."
             curl -X POST -H "Authorization: token ${{ github.token }}" \
               -d '{"tag_name":"v1.0.0","name":"Release v1.0.0"}' \

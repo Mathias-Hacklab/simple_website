@@ -27,9 +27,7 @@ jobs:
         id: set_flag
         run: |
           echo "RELEASE_READY=true" >> $GITHUB_ENV
-          echo "true" > release_ready
-        outputs:
-          release_ready: ${{ steps.set_flag.outputs.release_ready }}
+          echo "::set-output name=release_ready::true"
 
   publish-release:
     runs-on: ubuntu-latest

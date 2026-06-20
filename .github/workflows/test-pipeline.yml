@@ -1,4 +1,4 @@
-name: Production Asset Pipelines
+name: Production Asset Pipeline
 
 on:
   push:

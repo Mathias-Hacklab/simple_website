@@ -1,4 +1,4 @@
-name: Production Application Rollout 
+name: Production Application Rollout
 
 on:
   push:
@@ -18,10 +18,9 @@ jobs:
           echo "<html><body><h1>Production Deployment</h1></body></html>" > dist/index.html
 
       - name: Deploy Compiled Static Site to Host
-        run: echo "Initializing deployment sync..."
-        with:
-          source-directory: 'dist'
-          target-destination: '/var/www/html'
+        run: |
+          echo "Initializing deployment sync..."
+          cp -r dist/* /var/www/html
 
   verification-audit:
     runs-on: ubuntu-latest
